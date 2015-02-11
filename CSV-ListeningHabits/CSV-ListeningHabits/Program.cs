@@ -15,6 +15,15 @@ namespace CSV_ListeningHabits
         {
             // initalize dataset into list
             InitList();
+
+            List<Play> myList=OnTheFly("incubus", "Quicksand");
+            //foreach (var item in myList)
+            //{
+            //    Console.WriteLine(item.);
+            //}
+
+
+
             // keep console open
             Console.ReadLine();
         }
@@ -113,9 +122,41 @@ namespace CSV_ListeningHabits
         /// <returns>most popular artist in year</returns>
         public static string MostPopularArtistByYear(string year)
         {
+            //1 filter plays by the year
+            //2 group the ply by the artist
+            //3 order based on the number of plays
+            //4 take the first item
+            //5 return artist name
+
+            //1
+            List<Play> playInYear = musicDataList.Where(x => x.Time.Year.ToString() == year).ToList();
+            
+            //2
+            List<IGrouping<string, Play>> playsGroupedByAtrist = playInYear.GroupBy(x => x.Artist).ToList();
+
+            //3
+            List<IGrouping<string, Play>> orderedPlaysGroupedByArtist = playsGroupedByAtrist.OrderByDescending(x => x.Count()).ToList();
+
+            //4
+            IGrouping<string, Play> mostPopular = orderedPlaysGroupedByArtist.First();
+
+            //5
+            return mostPopular.Key;
  
-            return musicDataList.Where(x => x.Time.Year.ToString() == year).GroupBy(x => x.Artist).OrderByDescending(x => x.ToArray().Count()).First().First().Artist;
+           // return musicDataList.Where(x => x.Time.Year.ToString() == year).GroupBy(x => x.Artist).OrderByDescending(x => x.ToArray().Count()).First().First().Artist;
         }
+
+        /// <summary>
+        /// A function that creates a new list of play containing object with only the name of the artist and the title
+        /// </summary>
+        /// <param name="artistName"></param>
+        /// <param name="title"></param>
+        /// <returns>a list of new objects</returns>
+        public static List<Play> OnTheFly(string artistName, string title)
+        {
+            //we are calling the overload constructor method
+            return musicDataList.Select(x => new Play(x.Artist = artistName, x.Title = title)).ToList();
+        } 
     }
 
     public class Play
@@ -141,5 +182,14 @@ namespace CSV_ListeningHabits
 
             this.Album = playData[3];
         }
+
+        //overload contructor
+        public Play(string artist,string title)
+        {
+            this.Artist = artist;
+            this.Title = title;
+        }
     }
+
+   
 }
