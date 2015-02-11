@@ -16,7 +16,7 @@ namespace CSV_ListeningHabits
             // initalize dataset into list
             InitList();
             // keep console open
-            Console.ReadLine();
+
         }
         /// <summary>
         /// A function to initalize the List from the csv file
@@ -42,7 +42,9 @@ namespace CSV_ListeningHabits
         /// <returns>total number of plays</returns>
         public static int TotalPlays()
         {
-            return 0;
+
+            //musicDataList
+            return musicDataList.Count();
         }
         /// <summary>
         /// A function that returns the number of plays ever by an artist
@@ -51,7 +53,7 @@ namespace CSV_ListeningHabits
         /// <returns>total number of plays</returns>
         public static int TotalPlaysByArtistName(string artistName)
         {
-            return -1;
+            return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Count();
         }
         /// <summary>
         /// A function that returns the number of plays by a specific artist in a specific year
@@ -61,7 +63,7 @@ namespace CSV_ListeningHabits
         /// <returns>total plays in year</returns>
         public static int TotalPlaysByArtistNameInYear(string artistName, string year)
         {
-            return 0;
+            return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Where(x => x.Time.Year.ToString() == year).Count();
         }
         /// <summary>
         /// A function that returns the number of unique artists in the entire dataset
@@ -69,7 +71,7 @@ namespace CSV_ListeningHabits
         /// <returns>number of unique artists</returns>
         public static int CountUniqueArtists()
         {
-            return 0;
+            return musicDataList.Select(x => x.Artist).Distinct().Count();
         }
         /// <summary>
         /// A function that returns the number of unique artists in a given year
@@ -78,7 +80,7 @@ namespace CSV_ListeningHabits
         /// <returns>unique artists in year</returns>
         public static int CountUniqueArtists(string year)
         {
-            return 0;
+            return musicDataList.Where(x => x.Time.Year.ToString() == year).Select(x => x.Artist).Distinct().Count();
         }
         /// <summary>
         /// A function that returns a List of unique strings which contains
@@ -88,7 +90,8 @@ namespace CSV_ListeningHabits
         /// <returns>list of song titles</returns>
         public static List<string> TrackListByArtist(string artistName)
         {
-            return new List<string>();
+
+            return musicDataList.Where(x => x.Artist == artistName).Select(x => x.Title).ToList();
         }
         /// <summary>
         /// A function that returns the first time an artist was ever played
@@ -97,7 +100,8 @@ namespace CSV_ListeningHabits
         /// <returns>DateTime of first play</returns>
         public static DateTime FirstPlayByArtist(string artistName)
         {
-            return new DateTime(1);
+            return musicDataList.Where(x=>x.Artist.ToLower()==artistName.ToLower()).OrderBy(x => x.Time).First().Time;
+           // return new DateTime(1);
         }
         /// <summary>
         ///                     ***BONUS***
@@ -107,7 +111,8 @@ namespace CSV_ListeningHabits
         /// <returns>most popular artist in year</returns>
         public static string MostPopularArtistByYear(string year)
         {
-            return string.Empty;
+ 
+            return musicDataList.Where(x => x.Time.Year.ToString() == year).GroupBy(x => x.Artist).OrderByDescending(x => x.ToArray().Count()).First().First().Artist;
         }
     }
 
@@ -128,7 +133,11 @@ namespace CSV_ListeningHabits
             this.Time = posixTime.AddMilliseconds(long.Parse(playData[0]));
 
             // need to populate the rest of the properties
+            this.Artist = playData[1];
 
+            this.Title = playData[2];
+
+            this.Album = playData[3];
         }
     }
 }
