@@ -16,7 +16,7 @@ namespace CSV_ListeningHabits
             // initalize dataset into list
             InitList();
             // keep console open
-
+            Console.ReadLine();
         }
         /// <summary>
         /// A function to initalize the List from the csv file
@@ -53,7 +53,8 @@ namespace CSV_ListeningHabits
         /// <returns>total number of plays</returns>
         public static int TotalPlaysByArtistName(string artistName)
         {
-            return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Count();
+           // return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Count();
+            return musicDataList.Count(x => x.Artist.ToLower() == artistName.ToLower());
         }
         /// <summary>
         /// A function that returns the number of plays by a specific artist in a specific year
@@ -63,7 +64,8 @@ namespace CSV_ListeningHabits
         /// <returns>total plays in year</returns>
         public static int TotalPlaysByArtistNameInYear(string artistName, string year)
         {
-            return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Where(x => x.Time.Year.ToString() == year).Count();
+          // return musicDataList.Where(x => x.Artist.ToLower() == artistName.ToLower()).Where(x => x.Time.Year.ToString() == year).Count();
+            return musicDataList.Count((x => x.Artist.ToLower() == artistName.ToLower() && x.Time.Year.ToString() == year));
         }
         /// <summary>
         /// A function that returns the number of unique artists in the entire dataset
