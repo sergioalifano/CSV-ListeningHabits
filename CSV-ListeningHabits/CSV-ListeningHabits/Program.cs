@@ -17,12 +17,6 @@ namespace CSV_ListeningHabits
             InitList();
 
             List<Play> myList=OnTheFly("incubus", "Quicksand");
-            //foreach (var item in myList)
-            //{
-            //    Console.WriteLine(item.);
-            //}
-
-
 
             // keep console open
             Console.ReadLine();
